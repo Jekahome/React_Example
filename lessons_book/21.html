@@ -1,0 +1,41 @@
+<h6> Тема : ES7 + JSX + CRUD  </h6>
+
+
+<p>
+    - class Block extends React.Component в связке JSX => babel --presets react,es2015 lessons_book/jsxJS/forModules21 -d lessons_book/JS/forModules21</br>
+    - Передача ссылки на ф-цию обработчик через props дочернего элемента</br>
+    - window.localStorage + JSON.parse JSON.stringify</br>
+    - Object.keys(this.state.data).map(... для перебора объекта</br>
+    - this.refs</br>
+</p>
+<div id="app"></div>
+<!-- <script data-main="scripts/main" src="../require.js"></script> -->
+<!-- <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script> -->
+<script  src="/lessons_book/JS/forModules21/bundle.js"></script> <!-- JSX => babel + gulp = React.DOM-->
+
+
+<script type="text/babel">
+    //babel --presets react,es2015 lessons_book/jsxJS/forModules20 -d lessons_book/JS/forModules20
+</script>
+
+
+<style>
+    .update, .delete, .plus, .save {
+        cursor: pointer;
+
+        padding: 5px;
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+    .tablo{
+        background-color: #0f9d58;
+        border:1px solid black;
+        padding: 5px;
+        margin: 5px;
+    }
+    input {
+        vertical-align:middle;
+        display: inline;
+        width: 100px;
+    }
+</style>

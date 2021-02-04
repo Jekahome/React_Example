@@ -1,0 +1,99 @@
+<h6>Тема: Генерация списка Ul  </h6>
+<div id="app"></div>
+
+<script>
+/*
+    var componentUl = React.createClass({
+       displayName: 'Ul',
+       propTypes: {
+            li: React.PropTypes.arrayOf(
+                React.PropTypes.string
+            )
+        },
+       render:function(){
+
+           return React.DOM.ul(
+               null,
+               //content
+               this.props.li.map(function(content ,indx){
+                   // что бы не было предупреждения о не уникальности елемента
+                   // добавим уникальный ключ {key: indx}
+                   return React.DOM.li({key: indx},content);
+               })
+           )
+       }
+
+    });
+
+
+    var li = [
+        "Book", "Author", "Language", "Published", "Sales"
+    ];
+
+
+    ReactDOM.render(
+           React.createElement(
+                   componentUl,
+                   {li:li}
+               ),
+        document.getElementById('app')
+    );
+*/
+
+// при клике на li он запоминает количество кликов на нем
+    var componentUl = React.createClass({
+        displayName: 'Ul',
+        propTypes: {
+            li: React.PropTypes.arrayOf(
+                React.PropTypes.string
+            )
+        },
+        render:function(){
+
+            return React.DOM.ul({
+                    onClick:this._liClick
+                },
+                null,
+                //content
+                this.props.li.map(function(content ,indx){
+                    // что бы не было предупреждения о не уникальности елемента
+                    // добавим уникальный ключ {key: indx}
+
+                    return React.DOM.li({key: indx,"data-id":indx},content+" "+this.state.objLiCountState[indx]);
+                },this)
+            )
+        },
+        _liClick:function (event) {
+           var data = this.state.objLiCountState.slice();
+            data[event.target.dataset.id]++;// обновляем состояние
+            this.setState({
+               // objLiCount:Math.random()*100+1^0
+                objLiCountState:data
+            })
+        },
+        getInitialState:function () {
+            return {
+                objLiCountState: new Array(this.props.li.length).fill(5)
+            }
+        }
+
+    });
+
+
+    var li = [
+        "Book", "Author", "Language", "Published", "Sales"
+    ];
+
+
+    ReactDOM.render(
+        React.createElement(
+            componentUl,
+            {li:li}
+        ),
+        document.getElementById('app')
+    );
+
+
+
+</script>
+

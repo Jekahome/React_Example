@@ -1,0 +1,32 @@
+<h6> Тема стандартный селектор с подстановкой по id </h6>
+<div id="app"></div>
+<script >
+    ReactDOM.render(
+        //React.DOM.h1(null, "Hello world!"),
+        React.DOM.h1(
+            {
+                id: "my-heading",
+            },
+            "Hello World!"
+        ),
+        document.getElementById('app')
+    );
+
+   /* ReactDOM.render(
+        React.DOM.h1(
+            {
+              id:"myID",
+                style:{color:"red"}
+            },
+            " after span",
+            React.DOM.span(
+                {
+                    id:"mySpan"
+                },
+                "Hello World !"
+            ),
+            " before span"
+        ),
+        document.getElementById("app")
+    );*/
+</script>

@@ -1,0 +1,88 @@
+<h6>
+Тема: Состояние . Событие изменения елемента textarea влияет по событию onChange на состояние this.state.mytext
+и меняется мгновенно а свойство prop остается изначальным.
+События React кроссбраузерные и свойство ev.target.value работает везде и event.stopPropogation event.preventDefault
+API интерфейс компонента  за пределами.
+    </h6>
+<div id="app"></div>
+Состояние this.state
+Обработчик onChange
+Событие для обновления this.setState
+Инициализация данных состояния getInitialState
+<script>
+
+
+    var component = React.createClass({
+        render:function(){
+            return React.DOM.div(//div
+               null,
+                React.DOM.textarea({//.... дети #my-div
+                    value:this.state.myText,// данные после срабатывания события заново меняются
+                    onChange:this._textChangeMy,// пользовательский обработчик состояния
+                    onClick:this._textClickMy
+                }),
+                React.DOM.br(null),
+                React.DOM.h3(null,"props length: " +this.props.mytext.length),// не изменяется
+                React.DOM.h3({style:{color:"red"}},"state length: " + this.state.myText.length) // изменяется
+            )//div
+        },
+        //Инициализация свойства для состояния
+        getInitialState:function () {
+            return {
+                myText: this.props.mytext
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (event) {
+            this.setState({
+                myText:event.target.value,
+            })
+        },
+        _textClickMy:function (event) {
+            console.log(event.target.value);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    });
+
+    var myCounter = ReactDOM.render(
+        React.createElement(component,{ mytext:"default Jeka"}),
+        document.getElementById('app')
+    );
+    myCounter.parentNode === document.getElementById('app');
+
+    // использование компонента (методов) за пределами него
+    myCounter.setState({myText:"new live"});
+
+    console.info(myCounter.state);//Object {mytext: "new live"}
+
+    //получим DOM этого компонента == document.getElementById('app')
+    var reactAppNode = ReactDOM.findDOMNode(myCounter);
+    console.info(reactAppNode);
+
+
+
+</script>
+<!--
+Создание компонента
+
+this.props
+          доступ ко всем переданным свойствам компонента,
+          только для чтения
+
+
+propTypes
+         для уточнения принимаемых свойств и их типов
+
+getDefaultProps
+               возвращает значения по умолчанию для не обязательных свойств
+
+onChange
+        событие изменения работает в паре с свойством value
+
+this.setState
+            Для изменения свойств компонента в пользовательском обработчике
+
+
+
+-->

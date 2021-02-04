@@ -1,0 +1,190 @@
+<h6> Тема: Жизненный цикл компонента
+Применение примесей (многократно используемый код объекта)
+    </h6>
+<div id="app"></div>
+<div id="app2"></div>
+<!--<script type="text/babel">-->
+<script >
+
+    // Это общий log объект
+
+    var logMixin = {
+        _log: function(methodName, args) {
+            console.log(methodName, args);
+        },
+        componentWillUpdate:  function(nextProps,nextState) {
+            this._log('componentWillUpdate До вызова render() еще раз из-за изменения свойств или состояния',  arguments);
+            console.log(nextProps,nextState);
+        },
+        componentDidUpdate:   function(oldProps,oldState) {
+            this._log('componentDidUpdate После вызова render() еще раз из-за изменения свойств или состояния и изменения DOM ',   arguments);
+        },
+        componentWillMount:   function() {this._log('componentWillMount Перед вставкой узла в DOM модель',   arguments);},
+        componentDidMount:    function() {
+            this._log('componentDidMount После вставки узла в DOM модель',    arguments);
+            //ужэ доступен DOM
+            ReactDOM.findDOMNode(this);
+        },
+
+        componentWillUnmount: function() {this._log('componentWillUnmount Перед удалением компонента из DOM модели', arguments);},
+        shouldComponentUpdate:function(newProps,newState){
+            this._log('перед componentWillUpdate возможность отменить изменение компонента return false;',{newProps,newState});
+            return true;
+        }
+    };
+
+
+
+    var component1 = React.createClass({
+
+        render:function(){
+            return React.DOM.div(//div
+                {
+                    style:
+                        {
+                            background:"black",
+                            color:"white",
+                            fontFamily:"Verdana",
+                        },
+                    className:"empty",
+                    id:"my-div"
+                },
+
+                //.... дети #my-div
+                React.DOM.textarea({
+
+                    value:this.state.mytext,// данные после срабатывания события заново меняются
+                    onChange:this._textChangeMy// пользовательский обработчик состояния
+                }),
+
+                React.DOM.br(null),
+
+                // React.DOM.h3(null,"props length: " +this.props.mytext.length),
+
+                React.DOM.h3({style:{color:"red"}},"state length: " + this.state.mytext.length)
+            )//div
+        },
+        // Для уточнения принимаемых свойств и их типов
+        propTypes:{
+            mytext:React.PropTypes.string,
+            defaultValue:React.PropTypes.string,
+
+        },
+        // По умолчанию
+        getDefaultProps: function () {
+            return {
+                mytext:"default Jeka",// length 12
+                defaultValue:"property is undefined"
+            }
+        },
+        // Данные с которыми работает состояние (первоисточник)
+        getInitialState:function () {
+            return {
+                mytext: this.props.defaultValue
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (ev) {
+            this.setState({
+                mytext:ev.target.value,
+            })
+        },
+
+
+        // new code )))
+
+        name: 'component1',
+        mixins: [logMixin],
+
+    });
+
+    var component2 = React.createClass({
+
+        render:function(){
+            return React.DOM.div(//div
+                {
+                    style:
+                        {
+                            background:"black",
+                            color:"white",
+                            fontFamily:"Verdana",
+                        },
+                    className:"empty",
+                    id:"my-div"
+                },
+
+                //.... дети #my-div
+                React.DOM.textarea({
+
+                    value:this.state.mytext,// данные после срабатывания события заново меняются
+                    onChange:this._textChangeMy// пользовательский обработчик состояния
+                }),
+
+                React.DOM.br(null),
+
+                // React.DOM.h3(null,"props length: " +this.props.mytext.length),
+
+                React.DOM.h3({style:{color:"red"}},"state length: " + this.state.mytext.length)
+            )//div
+        },
+        // Для уточнения принимаемых свойств и их типов
+        propTypes:{
+            mytext:React.PropTypes.string,
+            defaultValue:React.PropTypes.string,
+
+        },
+        // По умолчанию
+        getDefaultProps: function () {
+            return {
+                mytext:"default Jeka",// length 12
+                defaultValue:"property is undefined"
+            }
+        },
+        // Данные с которыми работает состояние (первоисточник)
+        getInitialState:function () {
+            return {
+                mytext: this.props.defaultValue
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (ev) {
+            this.setState({
+                mytext:ev.target.value,
+            })
+        },
+
+
+        // new code )))
+
+        name: 'component2',
+        mixins: [logMixin],
+
+    });
+
+
+      ReactDOM.render(
+        // передача объекта
+        //React.createElement(component),
+       React.createElement(component1,{defaultValue:"hello"}),
+        document.getElementById('app')
+    );
+
+     ReactDOM.render(
+        // передача объекта
+        //React.createElement(component),
+        React.createElement(component2,{defaultValue:"hello"}),
+        document.getElementById('app2')
+    );
+
+
+
+
+</script>
+<pre>
+
+Примеси(объект js с методами и свойствами) нужны для включения (подмешивания )
+в свойства другого объекта
+
+
+</pre>
+

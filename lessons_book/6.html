@@ -1,0 +1,144 @@
+<h6> Тема: Жизненный цикл компонента
+    </h6>
+<div id="app"></div>
+<!--<script type="text/babel">-->
+<script >
+
+    var component = React.createClass({
+
+       render:function(){
+           return React.DOM.div(//div
+               {
+                   style:
+                       {
+                        background:"black",
+                        color:"white",
+                        fontFamily:"Verdana",
+                       },
+                   className:"empty",
+                   id:"my-div"
+               },
+
+               //.... дети #my-div
+               React.DOM.textarea({
+
+                   value:this.state.mytext,// данные после срабатывания события заново меняются
+                   onChange:this._textChangeMy// пользовательский обработчик состояния
+               }),
+
+               React.DOM.br(null),
+
+              // React.DOM.h3(null,"props length: " +this.props.mytext.length),
+
+               React.DOM.h3({style:{color:"red"}},"state length: " + this.state.mytext.length)
+           )//div
+       },
+        // Для уточнения принимаемых свойств и их типов
+        propTypes:{
+           mytext:React.PropTypes.string,
+           defaultValue:React.PropTypes.string,
+
+        },
+        // По умолчанию
+         getDefaultProps: function () {
+            return {
+                mytext:"default Jeka",// length 12
+                defaultValue:"property is undefined"
+            }
+        },
+        // Данные с которыми работает состояние (первоисточник)
+        getInitialState:function () {
+            return {
+                mytext: this.props.defaultValue
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (ev) {
+            this.setState({
+                mytext:ev.target.value,
+            })
+        },
+
+
+        _log: function(methodName, args) {
+            console.log(methodName, args);
+        },
+        componentWillUpdate:  function(nextProps,nextState) {
+           this._log('componentWillUpdate До вызова render() еще раз из-за изменения свойств или состояния',  arguments);
+            console.log(nextProps,nextState);
+
+           // можем управлять новыми данными состояния
+          // nextState.mytext = this.state.mytext;
+
+       },
+        componentDidUpdate:   function(oldProps,oldState) {
+           this._log('componentDidUpdate После вызова render() еще раз из-за изменения свойств или состояния и изменения DOM ',   arguments);
+
+           // можем вернуть старое значение состояния
+            if(this.state.mytext.length>10){
+
+                //setState объединяет свойства с теми которые имелись
+                //this.setState({mytext:oldState.mytext});
+              //replaceState перезаписывает свойства
+               this.replaceState(oldState);
+            }
+       },
+        componentWillMount:   function() {this._log('componentWillMount Перед вставкой узла в DOM модель',   arguments);},
+        componentDidMount:    function() {
+           this._log('componentDidMount После вставки узла в DOM модель',    arguments);
+            //ужэ доступен DOM
+            ReactDOM.findDOMNode(this);
+       },
+
+        componentWillUnmount: function() {
+           this._log('componentWillUnmount Перед удалением компонента из DOM модели', arguments);
+           // пример на удалении дочерних элементов родителем
+           },
+        shouldComponentUpdate:function(newProps,newState){
+            this._log('перед componentWillUpdate возможность отменить изменение компонента return false;',{newProps,newState});
+            return true;
+        }
+    });
+
+    var myCounter = ReactDOM.render(
+        // передача объекта
+        //React.createElement(component),
+       React.createElement(component,{defaultValue:"hello"}),
+        document.getElementById('app')
+    );
+
+// использование компонента (методов) за пределами него
+    /* myCounter.setState({mytext:"new live"});
+
+     console.info(myCounter.state);//Object {mytext: "new live"} /*
+      //получим DOM этого компонента == document.getElementById('app')
+      var reactAppNode = ReactDOM.findDOMNode(myCounter);
+      console.info(reactAppNode);
+ */
+
+
+
+
+
+
+
+</script>
+<pre>
+
+Жизненный цикл  компонента
+
+componentWillUpdate:    До вызова render() еще раз из-за изменения свойств или состояния
+componentDidUpdate:   После вызова render() еще раз из-за изменения свойств или состояния и изменения DOM
+componentWillMount:    Перед вставкой узла в DOM модель
+componentDidMount:   После вставки узла в DOM модель
+componentWillUnmount:  Перед удалением компонента из DOM модели
+shouldComponentUpdate: Перед событием componentWillUpdate что дает возможность отменить изменение компонента если return false;
+
+setState объединяет свойства с теми которые имелись
+//this.setState({mytext:oldState.mytext});
+
+replaceState перезаписывает свойства
+// this.replaceState(oldState);
+
+</pre>
+

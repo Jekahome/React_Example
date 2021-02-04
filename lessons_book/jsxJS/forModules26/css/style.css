@@ -1,0 +1,18 @@
+.update, .delete, .plus, .save {
+    cursor: pointer;
+
+    padding: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+.tablo{
+    background-color: #0f9d58;
+    border:1px solid black;
+    padding: 5px;
+    margin: 5px;
+}
+input {
+    vertical-align:middle;
+    display: inline;
+    width: 100px;
+}

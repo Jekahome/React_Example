@@ -1,0 +1,118 @@
+<h6> Тема: Жизненный цикл компонента, Вопрос не решен с componentWillReceiveProps
+https://facebook.github.io/react/docs/react-component.html#componentwillreceiveprops
+    </h6>
+<div id="app"></div>
+
+<script>
+
+    var component = React.createClass({
+
+       render:function(){
+           return React.DOM.div(//div
+               {
+                   style:
+                       {
+                        background:"black",
+                        color:"white",
+                        fontFamily:"Verdana",
+                       },
+                   className:"empty",
+                   id:"my-div"
+               },
+
+               //.... дети #my-div
+               React.DOM.textarea({
+
+                   value:this.state.mytext,// данные после срабатывания события заново меняются
+                   onChange:this._textChangeMy// пользовательский обработчик состояния
+               }),
+
+               React.DOM.br(null),
+
+              // React.DOM.h3(null,"props length: " +this.props.mytext.length),
+
+               React.DOM.h3({style:{color:"red"}},"state length: " + this.state.mytext.length)
+           )//div
+       },
+        // Для уточнения принимаемых свойств и их типов
+        propTypes:{
+           mytext:React.PropTypes.string,
+           defaultValue:React.PropTypes.string,
+
+        },
+        // По умолчанию
+         getDefaultProps: function () {
+            return {
+                mytext:"default Jeka",// length 12
+                defaultValue:"property is undefined"
+            }
+        },
+        // Данные с которыми работает состояние (первоисточник)
+        getInitialState:function () {
+            return {
+                mytext: this.props.defaultValue
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (ev) {
+
+            this.setState({
+                mytext:ev.target.value,
+            })
+        }
+        ,
+        componentWillReceiveProps: function(newProps) {
+           console.log("7");
+            if(newProps.defaultValue > this.props.defaultValue){
+                this.setState({
+                    mytext: newProps.defaultValue ,
+                });
+            }
+        }
+
+    });
+
+
+    var myCounter = ReactDOM.render(
+        // передача объекта
+        //React.createElement(component),
+       React.createElement(component,{defaultValue:"hello"}),
+        document.getElementById('app')
+    );
+
+
+
+
+// использование компонента (методов) за пределами него
+    /* myCounter.setState({mytext:"new live"});
+
+     console.info(myCounter.state);//Object {mytext: "new live"} /*
+      //получим DOM этого компонента == document.getElementById('app')
+      var reactAppNode = ReactDOM.findDOMNode(myCounter);
+      console.info(reactAppNode);
+ */
+
+
+
+</script>
+<pre>
+Создание компонента
+
+this.props
+          доступ ко всем переданным свойствам компонента,
+          только для чтения
+
+
+propTypes
+         для уточнения принимаемых свойств и их типов
+
+getDefaultProps
+               возвращает значения по умолчанию для не обязательных свойств
+
+onChange
+        событие изменения работает в паре с свойством value
+
+this.setState
+            Для изменения свойств компонента в пользовательском обработчике
+</pre>
+

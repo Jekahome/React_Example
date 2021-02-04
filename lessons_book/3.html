@@ -1,0 +1,89 @@
+<h6>Тема: передача компоненту данных и получение их через свойство prop
+, контроль типа , значение по умолчанию
+    </h6>
+<div id="app"></div>
+
+<script>
+
+    var component = React.createClass({
+
+       render:function(){
+           return React.DOM.span(//span
+               {
+                   style:
+                       {
+                        background:"black",
+                        color:"white",
+                        fontFamily:"Verdana",
+                       },
+                   className:"empty",
+                   id:"my-heading"
+               },
+               //content
+               // вывод объекта через свойство this.props
+             "My name is " +this.props.name+" and my em "+this.props.age+" years old "+
+                   this.props.arr.join('\n')
+           )//span
+       },
+        // Для обьявления принимаемых свойств и их типов
+        propTypes:{
+           name:React.PropTypes.string.isRequired,// обязательное строка
+            age:React.PropTypes.number,
+            arr:React.PropTypes.array
+            /*
+                array
+                bool
+                func
+                number
+                object
+                string
+                any
+                arrayOf
+                element
+                instanceOf
+                node
+                objectOf
+                oneOf
+                oneOfType
+                shape
+             */
+        },
+        // По умолчанию
+        getDefaultProps: function () {
+            return {
+                age:0,
+                arr:[1,2,3],
+                myAny:0
+            }
+        }
+
+
+    });
+
+
+    ReactDOM.render(
+        // передача объекта
+      // React.createElement(component,{name:"Jeka",age:32}),// My name is Jeka and my em 32 years old
+        React.createElement(component,{name:"Jeka"}),// My name is Jeka and my em not value years old
+        document.getElementById('app')
+    );
+
+
+
+
+
+</script>
+<!--
+Создание компонента
+
+this.props
+          доступ ко всем переданным свойствам компонента,
+          только для чтения
+
+
+propTypes
+         для уточнения принимаемых свойств и их типов
+
+getDefaultProps
+               возвращает значения по умолчанию для не обязательных свойств
+-->

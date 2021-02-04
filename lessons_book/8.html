@@ -1,0 +1,103 @@
+
+<h6>Тема: Применение дочернего компонента с
+    событием componentWillUnmount ( при стирании текста )
+    И оптимизация дочернего компонента</h6>
+<div id="app"></div>
+
+<!--<script type="text/babel">-->
+<script>
+
+    // Это общий log объект
+
+    var logMixin = {
+        _log: function(methodName, args) {
+            console.log(methodName, args);
+        },
+
+        componentWillUnmount: function() {
+            this._log('componentWillUnmount Перед удалением компонента из DOM модели', arguments);
+        },
+        shouldComponentUpdate:function(newProps,newState){
+
+            //this._log('перед componentWillUpdate возможность отменить изменение компонента return false;',{newProps,newState});
+            if(this.name && this.name=='Counter' && this.props.count==newProps.count) {
+                console.log('Не отрисовывать '+this.name);
+               // Дочерний элемент будет каждый раз отрисовываться даже когда нет необходимости
+                // тут мы можем это остановить
+                // счетчик если не поменялся то не следует его снова рисовать
+                return false;
+            }
+            console.log('Отрисовывать '+this.name);
+            return true;
+        }
+    };
+
+
+    var componentCounter = React.createClass({
+        render: function() {
+            return React.DOM.span(null, this.props.count);
+        },
+        name: 'Counter',
+        mixins: [React.addons.PureRenderMixin/*logMixin*/]
+    });
+
+
+    var component = React.createClass({
+        render:function(){
+            //Устанавливается свойство дочернего компонента count равному состоянию родителя
+            // при наличии инициализированного counter и this.state.mytext.length==0 произойдет событие componentWillUnmount
+            var counter = null;
+            if (this.state.mytext.length > 0) {
+                counter = React.DOM.h3({style:{color:"red"}},
+                    React.createElement(componentCounter, {
+                        count: "state length: " +this.state.mytext.length,
+                    })
+                );
+            }
+
+            return React.DOM.div(
+               null,
+                React.DOM.textarea({
+                    value:this.state.mytext,
+                    onChange:this._textChangeMy
+                }),
+
+                // Отображение дочернего компонента
+                counter
+            )
+        },
+        // Данные с которыми работает состояние (первоисточник)
+        getInitialState:function () {
+            return {
+                mytext: this.props.defaultValue
+            }
+        },
+        // Обработчик изменения состояния
+        _textChangeMy:function (ev) {
+            this.setState({
+                mytext:ev.target.value,
+            })
+        },
+
+        name: 'component',
+        mixins: [React.addons.PureRenderMixin/*logMixin*/],
+
+    });
+
+
+
+   ReactDOM.render(
+        // передача объекта
+       React.createElement(component,{defaultValue:""}),
+       document.getElementById('app')
+    );
+
+</script>
+<pre>
+
+Примеси(объект js с методами и свойствами) нужны для включения (подмешивания )
+в свойства другого объекта
+
+
+</pre>
+

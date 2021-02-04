@@ -1,0 +1,68 @@
+<h6>Тема: подстановка компонента со своими настройками DOM </h6>
+<div id="app"></div>
+<hr>
+<div id="app2"></div>
+<hr>
+<div id="app3"></div>
+<script>
+
+    var component = React.createClass({
+
+           render:function(){
+               return React.DOM.h1(//h1
+                   {
+                       style:
+                           {
+                            background:"black",
+                            color:"white",
+                            fontFamily:"Verdana",
+                           },
+                       className:"empty",
+                       id:"my-heading"
+                   },
+                   //content
+                   React.DOM.span(//span
+                       {
+                           htmlFor:"my-heading",
+                       },
+                       "Hello Word!"
+                   )//span
+               )//h1
+           }
+
+
+
+    });
+
+//№1
+    ReactDOM.render(
+         React.createElement(component),
+         document.getElementById('app')
+    );
+
+//№2
+    ReactDOM.render(
+        React.createElement("h1",null,"hello"),
+
+        document.getElementById('app2')
+    );
+
+//№3
+   // Другой способ содания нескольких экземпляров компонента
+    var componentFactory = React.createFactory(component);
+    ReactDOM.render(
+        componentFactory(),
+
+        document.getElementById('app3')
+    );
+
+
+</script>
+
+<!--
+<div id="app">
+   <h1 data-reactroot="" class="empty" id="my-heading" style="background: black; color: white; font-family: Verdana;">
+         <span for="my-heading">Hello Word!</span>
+     </h1>
+ </div>
+ -->
